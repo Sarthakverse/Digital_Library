@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +22,16 @@ public class Book {
     private String bookName;
     private String publicationYear;
     private Double bookPrice;
+    private Integer bookQuantity;
     private String bookEdition;
-    private String bookCategory;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Author author;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "book")
+    private Set<Loan> loans = new HashSet<>();
+
 }

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,4 +21,9 @@ public class Author {
     private Integer authorId;
     private String  authorName;
     private String authorAddress;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Set<Book> book = new HashSet<>();
+
+
 }
