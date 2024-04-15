@@ -43,8 +43,12 @@ public class UserRegistrationController {
                     .role(registerRequest.getRole())
                     .build();
             userRepository.save(user);
+            return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
         }
-        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+        else {
+               return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+        }
+
     }
 
     @PostMapping("/verify")
@@ -61,9 +65,16 @@ public class UserRegistrationController {
 
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponse> loginRequest(@Valid @RequestBody LoginRequest loginRequest) {
-        ResponseEntity<AuthenticationResponse> responseEntity = authenticationClient.loginRequest(loginRequest);
-        log.info("Received login response: {} {}", responseEntity.getStatusCode(), responseEntity.getBody());
-        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+        User user = userRepository.findByUserEmail(loginRequest.getEmail()).orElse(null);
+        if(user != null){
+            ResponseEntity<AuthenticationResponse> responseEntity = authenticationClient.loginRequest(loginRequest);
+            log.info("Received login response: {} {}", responseEntity.getStatusCode(), responseEntity.getBody());
+            return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+        }
+        else {
+            return ResponseEntity.status(400).body(new AuthenticationResponse(null, "User not found"));
+        }
+
     }
 
 }
