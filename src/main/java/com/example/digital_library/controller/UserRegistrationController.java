@@ -2,10 +2,10 @@ package com.example.digital_library.controller;
 
 import com.example.digital_library.client.AuthenticationClient;
 import com.example.digital_library.entity.User;
-import com.example.digital_library.payload.request.LoginRequest;
-import com.example.digital_library.payload.request.RegisterRequest;
-import com.example.digital_library.payload.request.VerifyRequest;
-import com.example.digital_library.payload.response.AuthenticationResponse;
+import com.example.digital_library.payload.request.loginAndSignup.LoginRequest;
+import com.example.digital_library.payload.request.loginAndSignup.RegisterRequest;
+import com.example.digital_library.payload.request.loginAndSignup.VerifyRequest;
+import com.example.digital_library.payload.request.loginAndSignup.AuthenticationResponse;
 import com.example.digital_library.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

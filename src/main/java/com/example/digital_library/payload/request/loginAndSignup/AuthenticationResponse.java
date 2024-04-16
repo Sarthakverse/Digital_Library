@@ -1,4 +1,4 @@
-package com.example.digital_library.payload.request;
+package com.example.digital_library.payload.request.loginAndSignup;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VerifyRequest {
-    private String email;
-    private String otp;
+public class AuthenticationResponse {
+    private String token;
+    private String message;
 }

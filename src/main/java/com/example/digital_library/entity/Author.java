@@ -22,7 +22,7 @@ public class Author {
     private String  authorName;
     private String authorAddress;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author",fetch = FetchType.EAGER)
     private Set<Book> book = new HashSet<>();
 
 

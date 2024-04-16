@@ -19,10 +19,10 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer loanId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Book book;
 
     private LocalDateTime loanDate;

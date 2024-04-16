@@ -1,17 +1,13 @@
 package com.example.digital_library.client;
 
 import com.example.digital_library.constants.Constant;
-import com.example.digital_library.entity.User;
-import com.example.digital_library.payload.request.LoginRequest;
-import com.example.digital_library.payload.request.RegisterRequest;
-import com.example.digital_library.payload.request.VerifyRequest;
-import com.example.digital_library.payload.response.AuthenticationResponse;
-import com.example.digital_library.repository.UserRepository;
-import lombok.Builder;
+import com.example.digital_library.payload.request.loginAndSignup.LoginRequest;
+import com.example.digital_library.payload.request.loginAndSignup.RegisterRequest;
+import com.example.digital_library.payload.request.loginAndSignup.VerifyRequest;
+import com.example.digital_library.payload.request.loginAndSignup.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

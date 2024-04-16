@@ -1,4 +1,4 @@
-package com.example.digital_library.payload.request;
+package com.example.digital_library.payload.request.loginAndSignup;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

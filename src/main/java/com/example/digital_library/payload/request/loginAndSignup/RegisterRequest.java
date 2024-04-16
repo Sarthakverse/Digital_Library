@@ -1,4 +1,4 @@
-package com.example.digital_library.payload.request;
+package com.example.digital_library.payload.request.loginAndSignup;
 
 import com.example.digital_library.entity.Role;
 import jakarta.validation.constraints.*;

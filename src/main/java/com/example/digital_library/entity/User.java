@@ -33,7 +33,7 @@ public class User implements UserDetails {
 
     private Boolean isVerified ;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",fetch = FetchType.EAGER)
     private Set<Loan> loans = new HashSet<>();
 
     @Override
