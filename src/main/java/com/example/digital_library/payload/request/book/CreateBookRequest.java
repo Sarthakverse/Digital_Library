@@ -10,13 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateBookRequest {
-    private Integer bookId;
+
     @NotBlank(message = "Book name is required")
     private String bookName;
 
@@ -33,6 +35,7 @@ public class CreateBookRequest {
     @Min(value = 1, message = "Book quantity must be at least 1")
     private Integer bookQuantity;
 
-    @NotNull(message = "Author is required")
-    private Author authorId;
+    @NotNull(message = "AuthorId is required")
+    private Author author;
+
 }

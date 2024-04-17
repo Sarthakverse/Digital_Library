@@ -32,10 +32,6 @@ public class User implements UserDetails {
     private Role role;
 
     private Boolean isVerified ;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",fetch = FetchType.EAGER)
-    private Set<Loan> loans = new HashSet<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
