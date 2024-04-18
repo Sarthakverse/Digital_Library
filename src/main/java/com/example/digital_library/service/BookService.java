@@ -3,18 +3,23 @@ import com.example.digital_library.entity.Author;
 import com.example.digital_library.entity.Book;
 import com.example.digital_library.entity.User;
 import com.example.digital_library.payload.request.book.CreateBookRequest;
+import com.example.digital_library.payload.response.author.DeleteAuthorResponse;
 import com.example.digital_library.payload.response.book.CreateBookResponse;
+import com.example.digital_library.payload.response.book.DeleteBookResponse;
 import com.example.digital_library.repository.AuthorRepository;
 import com.example.digital_library.repository.BookRepository;
 import com.example.digital_library.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,14 +61,13 @@ public class BookService {
                 log.info("Book created successfully: {}", savedBook);
 
                 return CreateBookResponse.builder()
-                        .message("book created successfully and its details are:-")
                         .bookId(savedBook.getBookId())
                         .bookName(savedBook.getBookName())
                         .bookEdition(savedBook.getBookEdition())
                         .publicationYear(savedBook.getPublicationYear())
                         .bookPrice(savedBook.getBookPrice())
                         .bookQuantity(savedBook.getBookQuantity())
-                        .author(savedBook.getAuthor())
+                        .author(savedBook.getAuthor().getAuthorName())
                         .build();
             } else {
                 throw new IllegalArgumentException("Book with the same name already exists");
@@ -85,17 +89,83 @@ public class BookService {
     }
 
     @Transactional
-    public List<Book> getAllBooks()
+    public Page<CreateBookResponse> getAllBooks(Pageable pageable)
     {
             log.info("Fetching all books");
-            return bookRepository.findAll();
+            List<CreateBookResponse> responses = new ArrayList<>();
+            Page<Book> books = bookRepository.findAll(pageable);
+
+            for(Book book: books)
+            {
+                Author author = book.getAuthor();
+                CreateBookResponse response = CreateBookResponse.builder()
+                        .bookId(book.getBookId())
+                        .bookName(book.getBookName())
+                        .publicationYear(book.getPublicationYear())
+                        .bookEdition(book.getBookEdition())
+                        .bookPrice(book.getBookPrice())
+                        .bookQuantity(book.getBookQuantity())
+                        .author(author != null ? author.getAuthorName() : null)
+                        .build();
+
+                responses.add(response);
+            }
+            return new PageImpl<>(responses, pageable , books.getTotalElements());
+
 
     }
 
     @Transactional
-    public List<Book> getBooksByAuthor(Integer authorId)
-    {
+    public List<CreateBookResponse> getBooksByAuthor(Integer authorId) {
         log.info("Fetching all books by author id: {}", authorId);
-        return bookRepository.findBookByAuthor_AuthorId(authorId);
+        Author author = authorRepository.findById(authorId).orElseThrow(
+                () -> new UsernameNotFoundException("Author with id " + authorId + " not found")
+        );
+        List<Book> books = bookRepository.findBookByAuthor_AuthorId(author.getAuthorId());
+        List<CreateBookResponse> responses = new ArrayList<>();
+
+        for(Book book : books)
+        {
+            CreateBookResponse response = CreateBookResponse.builder()
+                    .bookId(book.getBookId())
+                    .bookName(book.getBookName())
+                    .publicationYear(book.getPublicationYear())
+                    .bookEdition(book.getBookEdition())
+                    .bookPrice(book.getBookPrice())
+                    .bookQuantity(book.getBookQuantity())
+                    .author(author.getAuthorName())
+                    .build();
+            responses.add(response);
+        }
+        return responses;
+
     }
+
+    @Transactional
+    public DeleteBookResponse deleteBookById(Integer bookId)
+    {
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if(user.getRole().name().equals("USER") || user.getRole().name().equals("LIBRARIAN"))
+        {
+            return DeleteBookResponse.builder()
+                    .message("Only Admin can delete book")
+                    .build();
+        }
+        else{
+            Book book = bookRepository.findById(bookId).orElseThrow(
+                    ()->new UsernameNotFoundException("Book not found with id"+bookId)
+            );
+            bookRepository.delete(book);
+            log.info("Book deleted successfully: {}", book);
+            return DeleteBookResponse.builder()
+                    .message("Book deleted successfully")
+                    .bookName(book.getBookName())
+                    .build();
+        }
+
+
+    }
+
 }

@@ -33,6 +33,9 @@ public class Book {
     @ManyToOne(cascade = CascadeType.ALL)
     private Author author;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "book",fetch = FetchType.EAGER)
+    private List<Loan> loan = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Book{" +
