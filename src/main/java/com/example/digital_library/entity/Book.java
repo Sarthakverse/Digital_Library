@@ -1,6 +1,7 @@
 package com.example.digital_library.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "_book_")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookId")
-public class Book {
+public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer bookId;
@@ -34,6 +36,7 @@ public class Book {
     private Author author;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "book",fetch = FetchType.EAGER)
+//    @JsonManagedReference
     private List<Loan> loan = new ArrayList<>();
 
     @Override

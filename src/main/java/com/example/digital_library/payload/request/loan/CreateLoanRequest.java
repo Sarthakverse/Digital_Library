@@ -9,13 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateLoanRequest {
+public class CreateLoanRequest implements Serializable {
     @NotNull(message = "Start date is required")
     private Date startDate;
     @NotNull(message = "End date is required")

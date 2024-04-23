@@ -10,6 +10,8 @@ import com.example.digital_library.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1/author")
@@ -62,23 +65,20 @@ public class AuthorController {
 
    }
 
-   @GetMapping("/getAuthorById/{authorId}")
-    public ResponseEntity<?> getAuthorById(@PathVariable Integer authorId)
-   {
-         try{
-             Author author = authorService.getAuthorByID(authorId);
-             return new ResponseEntity<>(author,HttpStatus.OK);
-         }catch (UsernameNotFoundException ex)
-         {
-             log.error("Error while fetching author by id", ex);
-             ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
-             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-         }
+    @GetMapping("/getAuthorById/{authorId}")
+//    @Cacheable(value = "author", key = "#authorId")
+    public Author getAuthorById(@PathVariable Integer authorId) {
+        try {
+            Author author = authorService.getAuthorByID(authorId);
+//            author.getBook().size();
+            return author;
+        } catch (UsernameNotFoundException ex) {
+            log.error("Error while fetching author by id", ex);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+    }
 
-
-
-   }
-
+//   @CacheEvict(value = "author", key = "#authorId")
    @DeleteMapping("/deleteAuthor/{authorId}")
     public ResponseEntity<?> deleteAuthor(@PathVariable Integer authorId)
    {

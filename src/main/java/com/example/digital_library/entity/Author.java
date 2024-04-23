@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Set;
 @Builder
 @Table(name = "_author_")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "authorId")
-public class Author {
+public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer authorId;
