@@ -21,7 +21,8 @@ This is a digital library application built using Spring Boot, Spring Data JPA, 
 - JWT Authentication :  🔐 Secure the application using JSON Web Tokens for user authentication.
 
 ## Screenshots
- ![image](https://github.com/Sarthakverse/Digital_Library/assets/117356021/1f790afb-f620-4c2a-8617-155b7bcefdbe)
+![image](https://github.com/Sarthakverse/Digital_Library/assets/117356021/74759f88-048e-481e-b4ac-a7b62c8e3a1c)
+
 
 ## Technologies Used
 - Java 17
